@@ -290,9 +290,9 @@
      </div>
      <h1 id="app-title" class="text-xl md:text-3xl font-bold text-white">Monitoring Stok GIM</h1>
     </div>
-    <p id="app-subtitle" class="text-cyan-200 text-xs md:text-base">Sistem Pemantauan Real-time</p>
+    <p id="app-subtitle" class="text-cyan-200 text-xs md:text-base">Sistem Pemantauan Inventaris Real-time</p>
    </div><!-- Navigation Tabs -->
-   <div class="flex gap-2 md:gap-3 justify-center mb-6 fade-in" style="animation-delay: 0.05s"><button id="tab-stok" class="tab-button active px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all shadow-lg"> Stok GIM </button> <button id="tab-loading" class="tab-button px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all"> Loading </button>
+   <div class="flex gap-2 md:gap-3 justify-center mb-6 fade-in" style="animation-delay: 0.05s"><button id="tab-stok" class="tab-button active px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all shadow-lg"> 📦 Stok GIM </button> <button id="tab-loading" class="tab-button px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all"> 🚛 Loading </button>
    </div><!-- Stok Page Content -->
    <div id="page-stok" class="page-content active"><!-- Stats Cards -->
     <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6 fade-in" style="animation-delay: 0.1s">
@@ -315,27 +315,27 @@
       </svg><span class="font-semibold text-slate-700">Filter Data</span> <button id="clear-filters" class="ml-auto text-xs text-cyan-600 hover:text-cyan-700 font-medium px-3 py-1 rounded-lg hover:bg-cyan-50 transition-colors"> Reset Filter </button>
      </div>
      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-      <div class="relative"><input id="produk" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Produk" autocomplete="off"> <button type="button" id="produk-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="produk" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="🔍 Produk" autocomplete="off"> <button type="button" id="produk-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="produk-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="size" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Size" autocomplete="off"> <button type="button" id="size-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="size" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="📏 Size" autocomplete="off"> <button type="button" id="size-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="size-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="packing" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Packing" autocomplete="off"> <button type="button" id="packing-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="packing" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="📦 Packing" autocomplete="off"> <button type="button" id="packing-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="packing-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="brand" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Brand" autocomplete="off"> <button type="button" id="brand-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="brand" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="🏷️ Brand" autocomplete="off"> <button type="button" id="brand-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="brand-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="po" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" PO" autocomplete="off"> <button type="button" id="po-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="po" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="📋 PO" autocomplete="off"> <button type="button" id="po-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="po-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
@@ -410,7 +410,7 @@
       <p id="stat-loading-gim" class="text-xl md:text-2xl font-bold text-emerald-600">-</p>
      </div>
      <div class="stat-card" style="border-left-color: #8b5cf6;">
-      <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Semua PO</p>
+      <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Stok ALL</p>
       <p id="stat-loading-all" class="text-xl md:text-2xl font-bold text-violet-600">-</p>
      </div>
     </div><!-- Loading Filters -->
@@ -425,27 +425,27 @@
         </svg></button>
        <div id="plan-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="consignee-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Consignee" autocomplete="off"> <button type="button" id="consignee-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="consignee-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="🏢 Consignee" autocomplete="off"> <button type="button" id="consignee-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="consignee-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="produk-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="Produk" autocomplete="off"> <button type="button" id="produk-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="produk-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="🔍 Produk" autocomplete="off"> <button type="button" id="produk-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="produk-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="size-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Size" autocomplete="off"> <button type="button" id="size-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="size-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="�� Size" autocomplete="off"> <button type="button" id="size-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="size-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="brand-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Brand" autocomplete="off"> <button type="button" id="brand-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="brand-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="🏷️ Brand" autocomplete="off"> <button type="button" id="brand-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="brand-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="po-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" PO" autocomplete="off"> <button type="button" id="po-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="po-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="📋 PO" autocomplete="off"> <button type="button" id="po-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="po-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
@@ -471,7 +471,7 @@
          <th class="text-center">Jumlah</th>
          <th class="text-center">Stok GIM</th>
          <th class="text-center">+/-</th>
-         <th class="text-center">Semua PO</th>
+         <th class="text-center">Stok ALL</th>
         </tr>
        </thead>
        <tbody id="table-body-loading"></tbody>
