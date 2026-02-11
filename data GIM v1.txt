@@ -1,0 +1,1546 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitoring Stok GIM</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0c4a6e 100%);
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .table-container {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 8px;
+      width: 8px;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    
+    thead th {
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: white;
+      font-weight: 600;
+      padding: 10px 12px;
+      text-transform: uppercase;
+      font-size: 9px;
+      letter-spacing: 0.3px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      white-space: nowrap;
+    }
+    
+    @media (min-width: 768px) {
+      thead th {
+        padding: 14px 16px;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+      }
+    }
+    
+    thead th:first-child {
+      border-top-left-radius: 12px;
+    }
+    
+    thead th:last-child {
+      border-top-right-radius: 12px;
+    }
+    
+    tbody td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 11px;
+      color: #334155;
+      white-space: nowrap;
+    }
+    
+    @media (min-width: 768px) {
+      tbody td {
+        padding: 12px 16px;
+        font-size: 13px;
+      }
+    }
+    
+    tbody tr:hover {
+      background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
+    }
+    
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    tbody tr:last-child td:first-child {
+      border-bottom-left-radius: 12px;
+    }
+    
+    tbody tr:last-child td:last-child {
+      border-bottom-right-radius: 12px;
+    }
+    
+    .filter-input {
+      transition: all 0.2s ease;
+      border: 2px solid #e2e8f0;
+    }
+    
+    .filter-input:focus {
+      border-color: #0ea5e9;
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+      outline: none;
+    }
+    
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      border-left: 4px solid;
+    }
+    
+    @media (min-width: 768px) {
+      .stat-card {
+        padding: 16px 20px;
+      }
+    }
+    
+    .loading-spinner {
+      border: 3px solid #e2e8f0;
+      border-top: 3px solid #0ea5e9;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+    
+    .stock-positive {
+      color: #059669;
+      background: #d1fae5;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    
+    .stock-warning {
+      color: #d97706;
+      background: #fef3c7;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    
+    .stock-danger {
+      color: #dc2626;
+      background: #fee2e2;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    
+    .suggest-item {
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-size: 13px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    
+    .suggest-item:last-child {
+      border-bottom: none;
+    }
+    
+    .suggest-item:hover {
+      background: linear-gradient(90deg, #f0f9ff 0%, #e0f2fe 100%);
+    }
+    
+    .suggest-item.active {
+      background: #e0f2fe;
+    }
+    
+    .tab-button {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.7);
+      border: 2px solid transparent;
+    }
+    
+    .tab-button:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+    }
+    
+    .tab-button.active {
+      background: white;
+      color: #0ea5e9;
+      border-color: white;
+    }
+    
+    .page-content {
+      display: none;
+    }
+    
+    .page-content.active {
+      display: block;
+    }
+    
+    .pagination-btn {
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      border: 2px solid #e2e8f0;
+      background: white;
+      color: #64748b;
+      cursor: pointer;
+    }
+    
+    .pagination-btn:hover:not(:disabled) {
+      border-color: #0ea5e9;
+      color: #0ea5e9;
+      background: #f0f9ff;
+    }
+    
+    .pagination-btn.active {
+      background: #0ea5e9;
+      border-color: #0ea5e9;
+      color: white;
+    }
+    
+    .pagination-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    
+    @media (max-width: 640px) {
+      .pagination-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="gradient-bg h-full w-full overflow-auto">
+  <div class="min-h-full w-full p-4 md:p-6 lg:p-8"><!-- Header -->
+   <div class="text-center mb-6 fade-in">
+    <div class="inline-flex items-center gap-2 md:gap-3 mb-2">
+     <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+      <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+      </svg>
+     </div>
+     <h1 id="app-title" class="text-xl md:text-3xl font-bold text-white">Monitoring Stok GIM</h1>
+    </div>
+    <p id="app-subtitle" class="text-cyan-200 text-xs md:text-base">Sistem Pemantauan Real-time</p>
+   </div><!-- Navigation Tabs -->
+   <div class="flex gap-2 md:gap-3 justify-center mb-6 fade-in" style="animation-delay: 0.05s"><button id="tab-stok" class="tab-button active px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all shadow-lg"> Stok GIM </button> <button id="tab-loading" class="tab-button px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all"> Loading </button>
+   </div><!-- Stok Page Content -->
+   <div id="page-stok" class="page-content active"><!-- Stats Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6 fade-in" style="animation-delay: 0.1s">
+     <div class="stat-card" style="border-left-color: #0ea5e9;">
+      <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total Produk</p>
+      <p id="stat-total" class="text-xl md:text-2xl font-bold text-slate-800">-</p>
+     </div>
+     <div class="stat-card" style="border-left-color: #10b981;">
+      <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total Stok</p>
+      <p id="stat-stok" class="text-xl md:text-2xl font-bold text-emerald-600">-</p>
+     </div>
+     <div class="stat-card" style="border-left-color: #8b5cf6;">
+      <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total Nett (kg)</p>
+      <p id="stat-nett" class="text-xl md:text-2xl font-bold text-violet-600">-</p>
+     </div>
+    </div><!-- Filters -->
+    <div class="glass-card rounded-xl p-4 mb-6 fade-in" style="animation-delay: 0.2s">
+     <div class="flex items-center gap-2 mb-3">
+      <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+      </svg><span class="font-semibold text-slate-700">Filter Data</span> <button id="clear-filters" class="ml-auto text-xs text-cyan-600 hover:text-cyan-700 font-medium px-3 py-1 rounded-lg hover:bg-cyan-50 transition-colors"> Reset Filter </button>
+     </div>
+     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+      <div class="relative"><input id="produk" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Produk" autocomplete="off"> <button type="button" id="produk-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg></button>
+       <div id="produk-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
+      </div>
+      <div class="relative"><input id="size" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Size" autocomplete="off"> <button type="button" id="size-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg></button>
+       <div id="size-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
+      </div>
+      <div class="relative"><input id="packing" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Packing" autocomplete="off"> <button type="button" id="packing-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg></button>
+       <div id="packing-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
+      </div>
+      <div class="relative"><input id="brand" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Brand" autocomplete="off"> <button type="button" id="brand-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg></button>
+       <div id="brand-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
+      </div>
+      <div class="relative"><input id="po" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" PO" autocomplete="off"> <button type="button" id="po-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg></button>
+       <div id="po-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
+      </div>
+     </div>
+     <div id="last-updated" class="mt-3 flex items-center gap-2 text-xs text-slate-500">
+      <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg><span>Memuat info pembaruan...</span>
+     </div>
+    </div><!-- Loading State -->
+    <div id="loading" class="flex flex-col items-center justify-center py-16 fade-in">
+     <div class="loading-spinner mb-4"></div>
+     <p class="text-white text-sm">Memuat data dari Google Sheets...</p>
+    </div><!-- Error State -->
+    <div id="error" class="hidden glass-card rounded-xl p-8 text-center fade-in">
+     <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+      </svg>
+     </div>
+     <h3 class="text-lg font-semibold text-slate-800 mb-2">Gagal Memuat Data</h3>
+     <p class="text-slate-500 text-sm mb-4">Pastikan spreadsheet sudah dipublikasikan dan dapat diakses.</p><button onclick="init()" class="px-4 py-2 bg-cyan-500 text-white rounded-lg text-sm font-medium hover:bg-cyan-600 transition-colors"> Coba Lagi </button>
+    </div><!-- Table -->
+    <div id="table-wrapper" class="hidden table-container fade-in" style="animation-delay: 0.3s">
+     <div class="overflow-x-auto custom-scrollbar">
+      <table>
+       <thead>
+        <tr>
+         <th class="text-left">Produk</th>
+         <th class="text-left">Size</th>
+         <th class="text-left">Packing</th>
+         <th class="text-left">Brand</th>
+         <th class="text-left">PO</th>
+         <th class="text-center">Masuk</th>
+         <th class="text-center">Keluar</th>
+         <th class="text-center">Stok</th>
+         <th class="text-right">Nett (kg)</th>
+         <th class="text-right">Total Nett (kg)</th>
+        </tr>
+       </thead>
+       <tbody id="table-body"></tbody>
+      </table>
+     </div>
+     <div class="p-4 bg-slate-50 border-t border-slate-100">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+       <p id="result-count" class="text-sm text-slate-500"></p>
+       <p class="text-xs text-slate-400">Data diperbarui otomatis dari Google Sheets</p>
+      </div>
+      <div id="pagination-stok" class="flex flex-wrap items-center justify-center gap-2"></div>
+     </div>
+    </div><!-- Empty State -->
+    <div id="empty" class="hidden glass-card rounded-xl p-8 text-center fade-in">
+     <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+     </div>
+     <h3 class="text-lg font-semibold text-slate-800 mb-2">Data Tidak Ditemukan</h3>
+     <p class="text-slate-500 text-sm">Coba ubah filter pencarian Anda</p>
+    </div>
+   </div><!-- End Stok Page --> <!-- Loading Page Content -->
+   <div id="page-loading" class="page-content"><!-- Loading Stats Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 fade-in" style="animation-delay: 0.1s">
+     <div class="stat-card" style="border-left-color: #0ea5e9;">
+      <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total Loading</p>
+      <p id="stat-loading-total" class="text-xl md:text-2xl font-bold text-slate-800">-</p>
+     </div>
+     <div class="stat-card" style="border-left-color: #f59e0b;">
+      <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Total Jumlah</p>
+      <p id="stat-loading-jumlah" class="text-xl md:text-2xl font-bold text-amber-600">-</p>
+     </div>
+     <div class="stat-card" style="border-left-color: #10b981;">
+      <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Stok GIM</p>
+      <p id="stat-loading-gim" class="text-xl md:text-2xl font-bold text-emerald-600">-</p>
+     </div>
+     <div class="stat-card" style="border-left-color: #8b5cf6;">
+      <p class="text-xs text-slate-500 uppercase tracking-wide mb-1">Semua PO</p>
+      <p id="stat-loading-all" class="text-xl md:text-2xl font-bold text-violet-600">-</p>
+     </div>
+    </div><!-- Loading Filters -->
+    <div class="glass-card rounded-xl p-4 mb-6 fade-in" style="animation-delay: 0.2s">
+     <div class="flex items-center gap-2 mb-3">
+      <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+      </svg><span class="font-semibold text-slate-700">Filter Data Loading</span> <button id="clear-filters-loading" class="ml-auto text-xs text-cyan-600 hover:text-cyan-700 font-medium px-3 py-1 rounded-lg hover:bg-cyan-50 transition-colors"> Reset Filter </button>
+     </div>
+     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div class="relative"><input id="plan-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="📅 Plan" autocomplete="off"> <button type="button" id="plan-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg></button>
+       <div id="plan-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
+      </div>
+      <div class="relative"><input id="consignee-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Consignee" autocomplete="off"> <button type="button" id="consignee-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg></button>
+       <div id="consignee-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
+      </div>
+      <div class="relative"><input id="produk-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="Produk" autocomplete="off"> <button type="button" id="produk-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg></button>
+       <div id="produk-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
+      </div>
+      <div class="relative"><input id="size-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Size" autocomplete="off"> <button type="button" id="size-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg></button>
+       <div id="size-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
+      </div>
+      <div class="relative"><input id="brand-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Brand" autocomplete="off"> <button type="button" id="brand-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg></button>
+       <div id="brand-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
+      </div>
+      <div class="relative"><input id="po-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" PO" autocomplete="off"> <button type="button" id="po-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg></button>
+       <div id="po-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
+      </div>
+     </div>
+     <div id="last-updated-loading" class="mt-3 flex items-center gap-2 text-xs text-slate-500">
+      <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg><span>Memuat info pembaruan...</span>
+     </div>
+    </div><!-- Loading Table -->
+    <div id="table-wrapper-loading" class="hidden table-container fade-in" style="animation-delay: 0.3s">
+     <div class="overflow-x-auto custom-scrollbar">
+      <table>
+       <thead>
+        <tr>
+         <th class="text-left">Plan</th>
+         <th class="text-left">Consignee / INV</th>
+         <th class="text-left">Produk</th>
+         <th class="text-left">Size</th>
+         <th class="text-left">Packing</th>
+         <th class="text-left">Brand</th>
+         <th class="text-left">PO</th>
+         <th class="text-center">Jumlah</th>
+         <th class="text-center">Stok GIM</th>
+         <th class="text-center">+/-</th>
+         <th class="text-center">Semua PO</th>
+        </tr>
+       </thead>
+       <tbody id="table-body-loading"></tbody>
+      </table>
+     </div>
+     <div class="p-4 bg-slate-50 border-t border-slate-100">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+       <p id="result-count-loading" class="text-sm text-slate-500"></p>
+       <p class="text-xs text-slate-400">Data diperbarui otomatis dari Google Sheets</p>
+      </div>
+      <div id="pagination-loading" class="flex flex-wrap items-center justify-center gap-2"></div>
+     </div>
+    </div><!-- Loading Empty State -->
+    <div id="empty-loading" class="hidden glass-card rounded-xl p-8 text-center fade-in">
+     <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+     </div>
+     <h3 class="text-lg font-semibold text-slate-800 mb-2">Data Tidak Ditemukan</h3>
+     <p class="text-slate-500 text-sm">Coba ubah filter pencarian Anda</p>
+    </div>
+   </div><!-- End Loading Page -->
+  </div>
+  <script>
+const SPREADSHEET_ID = '1hTR_rqw0BPJm3Ntrp3LNDnZJVcx8uRLkwCsYhWdYbKg';
+const API_KEY = 'AIzaSyBhiKDVDH4fle5_EqAIaA05YjpxVMEBYZM';
+const SHEET_NAME = 'STOK';
+const LOADING_SHEET_NAME = 'LOADING';
+
+let allData = [];
+let allLoadingData = [];
+let currentPage = 'stok';
+
+let currentFilters = {
+  produk: '',
+  size: '',
+  packing: '',
+  brand: '',
+  po: ''
+};
+
+let currentLoadingFilters = {
+  plan: '',
+  consignee: '',
+  produk: '',
+  size: '',
+  brand: '',
+  po: ''
+};
+
+// Pagination state
+let currentStokPage = 1;
+let currentLoadingPage = 1;
+const itemsPerPage = 50;
+
+const defaultConfig = {
+  app_title: 'Monitoring Stok GIM',
+  subtitle: 'Sistem Pemantauan Inventaris Real-time',
+  primary_color: '#0ea5e9',
+  secondary_color: '#0f172a',
+  text_color: '#334155',
+  accent_color: '#10b981',
+  surface_color: '#ffffff'
+};
+
+let config = { ...defaultConfig };
+
+// Tab Navigation
+function switchPage(page) {
+  currentPage = page;
+  
+  // Update tab buttons
+  document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+  document.getElementById(`tab-${page}`).classList.add('active');
+  
+  // Update page content
+  document.querySelectorAll('.page-content').forEach(content => content.classList.remove('active'));
+  document.getElementById(`page-${page}`).classList.add('active');
+  
+  // Load data if not already loaded
+  if (page === 'loading' && allLoadingData.length === 0) {
+    initLoading();
+  }
+}
+
+document.getElementById('tab-stok').addEventListener('click', () => switchPage('stok'));
+document.getElementById('tab-loading').addEventListener('click', () => switchPage('loading'));
+
+// Auto-suggest functionality
+const filterFields = ['produk', 'size', 'packing', 'brand', 'po'];
+const fieldMapping = {
+  produk: 'PRODUK',
+  size: 'SIZE',
+  packing: 'PACKING',
+  brand: 'BRAND',
+  po: 'PO'
+};
+
+const loadingFilterFields = ['plan', 'consignee', 'produk', 'size', 'brand', 'po'];
+const loadingFieldMapping = {
+  plan: 'PLAN',
+  consignee: 'CONSIGNEE / INV',
+  produk: 'PRODUK',
+  size: 'SIZE',
+  brand: 'BRAND',
+  po: 'PO'
+};
+
+function getAvailableOptions(field, currentFilterValues) {
+  const fieldName = fieldMapping[field];
+  
+  // Filter data based on OTHER filters first
+  let filteredData = allData.filter(r => {
+    return Object.keys(fieldMapping).every(f => {
+      if (f === field) return true; // Don't filter by current field
+      const value = currentFilterValues[f];
+      if (!value) return true;
+      return (r[fieldMapping[f]] || '').toLowerCase().includes(value.toLowerCase());
+    });
+  });
+  
+  // Extract unique values for the current field
+  const values = new Set();
+  filteredData.forEach(r => {
+    const val = r[fieldName];
+    if (val && val.trim()) {
+      values.add(val.trim());
+    }
+  });
+  
+  return Array.from(values).sort();
+}
+
+function showSuggestions(field, inputValue, showAll = false) {
+  const suggestDiv = document.getElementById(`${field}-suggest`);
+  
+  const currentFilterValues = { ...currentFilters };
+  const options = getAvailableOptions(field, currentFilterValues);
+  
+  let filtered;
+  if (showAll || !inputValue) {
+    filtered = options;
+  } else {
+    filtered = options.filter(opt => 
+      opt.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  }
+  
+  if (filtered.length === 0) {
+    suggestDiv.classList.add('hidden');
+    return;
+  }
+  
+  suggestDiv.innerHTML = '';
+  filtered.forEach(opt => {
+    const div = document.createElement('div');
+    div.className = 'suggest-item';
+    div.textContent = opt;
+    div.onclick = () => {
+      document.getElementById(field).value = opt;
+      currentFilters[field] = opt;
+      suggestDiv.classList.add('hidden');
+      filterData();
+      
+      // Update suggestions for other fields
+      filterFields.forEach(f => {
+        if (f !== field) {
+          const input = document.getElementById(f);
+          if (input.value) {
+            showSuggestions(f, input.value);
+          }
+        }
+      });
+    };
+    suggestDiv.appendChild(div);
+  });
+  
+  suggestDiv.classList.remove('hidden');
+}
+
+function toggleDropdown(field) {
+  const suggestDiv = document.getElementById(`${field}-suggest`);
+  const input = document.getElementById(field);
+  
+  if (suggestDiv.classList.contains('hidden')) {
+    // Close all other dropdowns first
+    filterFields.forEach(f => {
+      if (f !== field) {
+        document.getElementById(`${f}-suggest`).classList.add('hidden');
+      }
+    });
+    
+    // Show all options for this field
+    showSuggestions(field, input.value, true);
+  } else {
+    suggestDiv.classList.add('hidden');
+  }
+}
+
+// Setup auto-suggest for all filter fields
+filterFields.forEach(field => {
+  const input = document.getElementById(field);
+  const suggestDiv = document.getElementById(`${field}-suggest`);
+  const toggleBtn = document.getElementById(`${field}-toggle`);
+  
+  // Toggle button click
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleDropdown(field);
+  });
+  
+  input.addEventListener('input', (e) => {
+    currentFilters[field] = e.target.value;
+    showSuggestions(field, e.target.value);
+  });
+  
+  input.addEventListener('focus', (e) => {
+    if (e.target.value) {
+      showSuggestions(field, e.target.value);
+    }
+  });
+  
+  // Close suggestions when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!input.contains(e.target) && !suggestDiv.contains(e.target) && !toggleBtn.contains(e.target)) {
+      suggestDiv.classList.add('hidden');
+    }
+  });
+  
+  // Keyboard navigation
+  input.addEventListener('keydown', (e) => {
+    const items = suggestDiv.querySelectorAll('.suggest-item');
+    const activeItem = suggestDiv.querySelector('.suggest-item.active');
+    let currentIndex = Array.from(items).indexOf(activeItem);
+    
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (currentIndex < items.length - 1) {
+        if (activeItem) activeItem.classList.remove('active');
+        items[currentIndex + 1].classList.add('active');
+        items[currentIndex + 1].scrollIntoView({ block: 'nearest' });
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (currentIndex > 0) {
+        if (activeItem) activeItem.classList.remove('active');
+        items[currentIndex - 1].classList.add('active');
+        items[currentIndex - 1].scrollIntoView({ block: 'nearest' });
+      }
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (activeItem) {
+        activeItem.click();
+      }
+    } else if (e.key === 'Escape') {
+      suggestDiv.classList.add('hidden');
+    }
+  });
+});
+
+async function fetchLastModified() {
+  try {
+    const url = `https://www.googleapis.com/drive/v3/files/${SPREADSHEET_ID}?fields=modifiedTime,modifiedByMeTime&key=${API_KEY}`;
+    const response = await fetch(url);
+    
+    if (response.ok) {
+      const data = await response.json();
+      const modifiedTime = new Date(data.modifiedTime);
+      
+      const now = new Date();
+      const diffMs = now - modifiedTime;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+      
+      let timeAgo;
+      if (diffMins < 1) {
+        timeAgo = 'Baru saja';
+      } else if (diffMins < 60) {
+        timeAgo = `${diffMins} menit yang lalu`;
+      } else if (diffHours < 24) {
+        timeAgo = `${diffHours} jam yang lalu`;
+      } else {
+        timeAgo = `${diffDays} hari yang lalu`;
+      }
+      
+      const formattedDate = modifiedTime.toLocaleString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      
+      document.getElementById('last-updated').innerHTML = `
+        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span class="font-medium">Terakhir diperbarui:</span>
+        <span>${formattedDate}</span>
+        <span class="text-cyan-600">(${timeAgo})</span>
+      `;
+    } else {
+      document.getElementById('last-updated').innerHTML = `
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span>Info pembaruan tidak tersedia</span>
+      `;
+    }
+  } catch (error) {
+    console.error('Error fetching last modified:', error);
+    document.getElementById('last-updated').innerHTML = `
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span>Info pembaruan tidak tersedia</span>
+    `;
+  }
+}
+
+async function init() {
+  showLoading();
+  
+  try {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch data from Google Sheets');
+    }
+    
+    const data = await response.json();
+    
+    if (data.values && data.values.length > 1) {
+      const headers = data.values[0];
+      const rows = data.values.slice(1);
+      
+      allData = rows.map(row => {
+        const obj = {};
+        headers.forEach((header, index) => {
+          obj[header] = row[index] || '';
+        });
+        return obj;
+      });
+      
+      renderTable(allData);
+      updateStats(allData);
+      showTable();
+      
+      // Fetch last modified info
+      fetchLastModified();
+    } else {
+      showError();
+    }
+  } catch (error) {
+    console.error('Error loading spreadsheet:', error);
+    showError();
+  }
+}
+
+function showLoading() {
+  document.getElementById('loading').classList.remove('hidden');
+  document.getElementById('table-wrapper').classList.add('hidden');
+  document.getElementById('error').classList.add('hidden');
+  document.getElementById('empty').classList.add('hidden');
+}
+
+function showTable() {
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('table-wrapper').classList.remove('hidden');
+  document.getElementById('error').classList.add('hidden');
+  document.getElementById('empty').classList.add('hidden');
+}
+
+function showError() {
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('table-wrapper').classList.add('hidden');
+  document.getElementById('error').classList.remove('hidden');
+  document.getElementById('empty').classList.add('hidden');
+}
+
+function showEmpty() {
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('table-wrapper').classList.add('hidden');
+  document.getElementById('error').classList.add('hidden');
+  document.getElementById('empty').classList.remove('hidden');
+}
+
+function formatNumber(num) {
+  const n = parseFloat(num) || 0;
+  return n.toLocaleString('id-ID');
+}
+
+function getStockClass(stock) {
+  const s = parseFloat(stock) || 0;
+  if (s > 100) return 'stock-positive';
+  if (s > 20) return 'stock-warning';
+  return 'stock-danger';
+}
+
+function updateStats(data) {
+  const totalProduk = data.length;
+  let totalStok = 0;
+  let totalNett = 0;
+  
+  data.forEach(r => {
+    totalStok += parseFloat(r['STOK GIM']) || 0;
+    totalNett += parseFloat(r['Total Nett Weight']) || 0;
+  });
+  
+  document.getElementById('stat-total').textContent = formatNumber(totalProduk);
+  document.getElementById('stat-stok').textContent = formatNumber(totalStok);
+  document.getElementById('stat-nett').textContent = formatNumber(totalNett.toFixed(2));
+}
+
+function renderPagination(totalItems, currentPage, containerId, onPageChange) {
+  const container = document.getElementById(containerId);
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  
+  if (totalPages <= 1) {
+    container.innerHTML = '';
+    return;
+  }
+  
+  let html = '';
+  
+  // Previous button
+  html += `<button class="pagination-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="${onPageChange}(${currentPage - 1})">
+    ← Prev
+  </button>`;
+  
+  // Page numbers
+  const maxVisible = 5;
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+  
+  if (endPage - startPage < maxVisible - 1) {
+    startPage = Math.max(1, endPage - maxVisible + 1);
+  }
+  
+  if (startPage > 1) {
+    html += `<button class="pagination-btn" onclick="${onPageChange}(1)">1</button>`;
+    if (startPage > 2) {
+      html += `<span class="px-2 text-slate-400">...</span>`;
+    }
+  }
+  
+  for (let i = startPage; i <= endPage; i++) {
+    html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="${onPageChange}(${i})">
+      ${i}
+    </button>`;
+  }
+  
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      html += `<span class="px-2 text-slate-400">...</span>`;
+    }
+    html += `<button class="pagination-btn" onclick="${onPageChange}(${totalPages})">${totalPages}</button>`;
+  }
+  
+  // Next button
+  html += `<button class="pagination-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="${onPageChange}(${currentPage + 1})">
+    Next →
+  </button>`;
+  
+  container.innerHTML = html;
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = '';
+  
+  if (data.length === 0) {
+    showEmpty();
+    document.getElementById('pagination-stok').innerHTML = '';
+    return;
+  }
+  
+  showTable();
+  
+  // Calculate pagination
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+  if (currentStokPage > totalPages) {
+    currentStokPage = totalPages;
+  }
+  
+  const startIndex = (currentStokPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, data.length);
+  const paginatedData = data.slice(startIndex, endIndex);
+  
+  paginatedData.forEach((r, index) => {
+    const stock = parseFloat(r['STOK GIM']) || 0;
+    const stockClass = getStockClass(stock);
+    
+    const row = document.createElement('tr');
+    row.style.animationDelay = `${index * 0.02}s`;
+    row.className = 'fade-in';
+    row.innerHTML = `
+      <td class="font-medium text-slate-800">${r.PRODUK || '-'}</td>
+      <td>${r.SIZE || '-'}</td>
+      <td>${r.PACKING || '-'}</td>
+      <td>
+        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
+          ${r.BRAND || '-'}
+        </span>
+      </td>
+      <td class="font-mono text-xs">${r.PO || '-'}</td>
+      <td class="text-center">
+        <span class="text-emerald-600 font-semibold">${formatNumber(r['IN GIM'])}</span>
+      </td>
+      <td class="text-center">
+        <span class="text-amber-600 font-semibold">${formatNumber(r['OUT GIM'])}</span>
+      </td>
+      <td class="text-center">
+        <span class="${stockClass}">${formatNumber(stock)}</span>
+      </td>
+      <td class="text-right font-mono">${formatNumber(r['Nett Weight'])}</td>
+      <td class="text-right font-mono font-semibold">${formatNumber(r['Total Nett Weight'])}</td>
+    `;
+    tbody.appendChild(row);
+  });
+  
+  document.getElementById('result-count').textContent = `Menampilkan ${startIndex + 1}-${endIndex} dari ${data.length} data`;
+  
+  // Render pagination
+  renderPagination(data.length, currentStokPage, 'pagination-stok', 'goToStokPage');
+}
+
+function goToStokPage(page) {
+  currentStokPage = page;
+  const filtered = allData.filter(r =>
+    (!currentFilters.produk || (r.PRODUK || '').toLowerCase().includes(currentFilters.produk.toLowerCase())) &&
+    (!currentFilters.size || (r.SIZE || '').toLowerCase().includes(currentFilters.size.toLowerCase())) &&
+    (!currentFilters.packing || (r.PACKING || '').toLowerCase().includes(currentFilters.packing.toLowerCase())) &&
+    (!currentFilters.brand || (r.BRAND || '').toLowerCase().includes(currentFilters.brand.toLowerCase())) &&
+    (!currentFilters.po || (r.PO || '').toLowerCase().includes(currentFilters.po.toLowerCase()))
+  );
+  renderTable(filtered);
+  updateStats(filtered);
+  
+  // Scroll to top of table
+  document.getElementById('table-wrapper').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function filterData() {
+  currentStokPage = 1; // Reset to first page on filter
+  const filtered = allData.filter(r =>
+    (!currentFilters.produk || (r.PRODUK || '').toLowerCase().includes(currentFilters.produk.toLowerCase())) &&
+    (!currentFilters.size || (r.SIZE || '').toLowerCase().includes(currentFilters.size.toLowerCase())) &&
+    (!currentFilters.packing || (r.PACKING || '').toLowerCase().includes(currentFilters.packing.toLowerCase())) &&
+    (!currentFilters.brand || (r.BRAND || '').toLowerCase().includes(currentFilters.brand.toLowerCase())) &&
+    (!currentFilters.po || (r.PO || '').toLowerCase().includes(currentFilters.po.toLowerCase()))
+  );
+
+  renderTable(filtered);
+  updateStats(filtered);
+}
+
+function clearFilters() {
+  currentStokPage = 1; // Reset to first page
+  filterFields.forEach(field => {
+    document.getElementById(field).value = '';
+    document.getElementById(`${field}-suggest`).classList.add('hidden');
+    currentFilters[field] = '';
+  });
+  renderTable(allData);
+  updateStats(allData);
+}
+
+// Event listeners
+filterFields.forEach(id =>
+  document.getElementById(id).addEventListener('input', filterData)
+);
+
+document.getElementById('clear-filters').addEventListener('click', clearFilters);
+
+// SDK initialization
+async function onConfigChange(cfg) {
+  config = { ...defaultConfig, ...cfg };
+  
+  document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+  document.getElementById('app-subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+}
+
+function mapToCapabilities(cfg) {
+  return {
+    recolorables: [
+      {
+        get: () => cfg.secondary_color || defaultConfig.secondary_color,
+        set: (value) => {
+          cfg.secondary_color = value;
+          window.elementSdk.setConfig({ secondary_color: value });
+        }
+      },
+      {
+        get: () => cfg.surface_color || defaultConfig.surface_color,
+        set: (value) => {
+          cfg.surface_color = value;
+          window.elementSdk.setConfig({ surface_color: value });
+        }
+      },
+      {
+        get: () => cfg.text_color || defaultConfig.text_color,
+        set: (value) => {
+          cfg.text_color = value;
+          window.elementSdk.setConfig({ text_color: value });
+        }
+      },
+      {
+        get: () => cfg.primary_color || defaultConfig.primary_color,
+        set: (value) => {
+          cfg.primary_color = value;
+          window.elementSdk.setConfig({ primary_color: value });
+        }
+      },
+      {
+        get: () => cfg.accent_color || defaultConfig.accent_color,
+        set: (value) => {
+          cfg.accent_color = value;
+          window.elementSdk.setConfig({ accent_color: value });
+        }
+      }
+    ],
+    borderables: [],
+    fontEditable: undefined,
+    fontSizeable: undefined
+  };
+}
+
+function mapToEditPanelValues(cfg) {
+  return new Map([
+    ['app_title', cfg.app_title || defaultConfig.app_title],
+    ['subtitle', cfg.subtitle || defaultConfig.subtitle]
+  ]);
+}
+
+// Initialize SDK
+if (window.elementSdk) {
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange,
+    mapToCapabilities,
+    mapToEditPanelValues
+  });
+}
+
+// Loading Page Functions
+async function initLoading() {
+  showLoadingState('loading');
+  
+  try {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${LOADING_SHEET_NAME}?key=${API_KEY}`;
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch loading data from Google Sheets');
+    }
+    
+    const data = await response.json();
+    
+    if (data.values && data.values.length > 1) {
+      const headers = data.values[0];
+      const rows = data.values.slice(1);
+      
+      allLoadingData = rows.map(row => {
+        const obj = {};
+        headers.forEach((header, index) => {
+          obj[header] = row[index] || '';
+        });
+        return obj;
+      });
+      
+      renderLoadingTable(allLoadingData);
+      updateLoadingStats(allLoadingData);
+      showLoadingTable();
+      
+      fetchLastModifiedLoading();
+    } else {
+      showError();
+    }
+  } catch (error) {
+    console.error('Error loading spreadsheet:', error);
+    showError();
+  }
+}
+
+function showLoadingState(page) {
+  if (page === 'loading') {
+    document.getElementById('loading').classList.remove('hidden');
+    document.getElementById('table-wrapper-loading').classList.add('hidden');
+    document.getElementById('empty-loading').classList.add('hidden');
+  }
+}
+
+function showLoadingTable() {
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('table-wrapper-loading').classList.remove('hidden');
+  document.getElementById('empty-loading').classList.add('hidden');
+}
+
+function showEmptyLoading() {
+  document.getElementById('loading').classList.add('hidden');
+  document.getElementById('table-wrapper-loading').classList.add('hidden');
+  document.getElementById('empty-loading').classList.remove('hidden');
+}
+
+function updateLoadingStats(data) {
+  const totalLoading = data.length;
+  let totalJumlah = 0;
+  let totalGIM = 0;
+  let totalALL = 0;
+  
+  data.forEach(r => {
+    totalJumlah += parseFloat(r['JUMLAH']) || 0;
+    totalGIM += parseFloat(r['STOK GIM']) || 0;
+    totalALL += parseFloat(r['STOK ALL']) || 0;
+  });
+  
+  document.getElementById('stat-loading-total').textContent = formatNumber(totalLoading);
+  document.getElementById('stat-loading-jumlah').textContent = formatNumber(totalJumlah);
+  document.getElementById('stat-loading-gim').textContent = formatNumber(totalGIM);
+  document.getElementById('stat-loading-all').textContent = formatNumber(totalALL);
+}
+
+function renderLoadingTable(data) {
+  const tbody = document.getElementById('table-body-loading');
+  tbody.innerHTML = '';
+  
+  if (data.length === 0) {
+    showEmptyLoading();
+    document.getElementById('pagination-loading').innerHTML = '';
+    return;
+  }
+  
+  showLoadingTable();
+  
+  // Calculate pagination
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+  if (currentLoadingPage > totalPages) {
+    currentLoadingPage = totalPages;
+  }
+  
+  const startIndex = (currentLoadingPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, data.length);
+  const paginatedData = data.slice(startIndex, endIndex);
+  
+  paginatedData.forEach((r, index) => {
+    // Get +/- value - check all available columns in the row
+    let plusMinusRaw = '';
+    const possibleKeys = Object.keys(r);
+    
+    // Find the column that contains +/- in its name
+    for (const key of possibleKeys) {
+      if (key.includes('+') || key.includes('-') || key.toLowerCase().includes('plus') || key.toLowerCase().includes('minus')) {
+        plusMinusRaw = r[key];
+        break;
+      }
+    }
+    
+    const plusMinus = parseFloat(plusMinusRaw) || 0;
+    let plusMinusClass = '';
+    let plusMinusText = formatNumber(Math.abs(plusMinus));
+    
+    if (plusMinus > 0) {
+      plusMinusClass = 'text-emerald-600 font-semibold';
+      plusMinusText = '+' + plusMinusText;
+    } else if (plusMinus < 0) {
+      plusMinusClass = 'text-red-600 font-semibold';
+      plusMinusText = '-' + plusMinusText;
+    } else {
+      plusMinusClass = 'text-slate-500';
+    }
+    
+    const row = document.createElement('tr');
+    row.style.animationDelay = `${index * 0.02}s`;
+    row.className = 'fade-in';
+    row.innerHTML = `
+      <td class="font-medium text-slate-800">${r.PLAN || '-'}</td>
+      <td>${r['CONSIGNEE / INV'] || '-'}</td>
+      <td class="font-medium text-slate-800">${r.PRODUK || '-'}</td>
+      <td>${r.SIZE || '-'}</td>
+      <td>${r.PACKING || '-'}</td>
+      <td>
+        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
+          ${r.BRAND || '-'}
+        </span>
+      </td>
+      <td class="font-mono text-xs">${r.PO || '-'}</td>
+      <td class="text-center">
+        <span class="text-amber-600 font-semibold">${formatNumber(r['JUMLAH'])}</span>
+      </td>
+      <td class="text-center">
+        <span class="text-emerald-600 font-semibold">${formatNumber(r['STOK GIM'])}</span>
+      </td>
+      <td class="text-center">
+        <span class="${plusMinusClass}">${plusMinusText}</span>
+      </td>
+      <td class="text-center">
+        <span class="text-violet-600 font-semibold">${formatNumber(r['STOK ALL'])}</span>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+  
+  document.getElementById('result-count-loading').textContent = `Menampilkan ${startIndex + 1}-${endIndex} dari ${data.length} data`;
+  
+  // Render pagination
+  renderPagination(data.length, currentLoadingPage, 'pagination-loading', 'goToLoadingPage');
+}
+
+function goToLoadingPage(page) {
+  currentLoadingPage = page;
+  const filtered = allLoadingData.filter(r =>
+    (!currentLoadingFilters.plan || (r.PLAN || '').toLowerCase().includes(currentLoadingFilters.plan.toLowerCase())) &&
+    (!currentLoadingFilters.consignee || (r['CONSIGNEE / INV'] || '').toLowerCase().includes(currentLoadingFilters.consignee.toLowerCase())) &&
+    (!currentLoadingFilters.produk || (r.PRODUK || '').toLowerCase().includes(currentLoadingFilters.produk.toLowerCase())) &&
+    (!currentLoadingFilters.size || (r.SIZE || '').toLowerCase().includes(currentLoadingFilters.size.toLowerCase())) &&
+    (!currentLoadingFilters.brand || (r.BRAND || '').toLowerCase().includes(currentLoadingFilters.brand.toLowerCase())) &&
+    (!currentLoadingFilters.po || (r.PO || '').toLowerCase().includes(currentLoadingFilters.po.toLowerCase()))
+  );
+  renderLoadingTable(filtered);
+  updateLoadingStats(filtered);
+  
+  // Scroll to top of table
+  document.getElementById('table-wrapper-loading').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function filterLoadingData() {
+  currentLoadingPage = 1; // Reset to first page on filter
+  const filtered = allLoadingData.filter(r =>
+    (!currentLoadingFilters.plan || (r.PLAN || '').toLowerCase().includes(currentLoadingFilters.plan.toLowerCase())) &&
+    (!currentLoadingFilters.consignee || (r['CONSIGNEE / INV'] || '').toLowerCase().includes(currentLoadingFilters.consignee.toLowerCase())) &&
+    (!currentLoadingFilters.produk || (r.PRODUK || '').toLowerCase().includes(currentLoadingFilters.produk.toLowerCase())) &&
+    (!currentLoadingFilters.size || (r.SIZE || '').toLowerCase().includes(currentLoadingFilters.size.toLowerCase())) &&
+    (!currentLoadingFilters.brand || (r.BRAND || '').toLowerCase().includes(currentLoadingFilters.brand.toLowerCase())) &&
+    (!currentLoadingFilters.po || (r.PO || '').toLowerCase().includes(currentLoadingFilters.po.toLowerCase()))
+  );
+
+  renderLoadingTable(filtered);
+  updateLoadingStats(filtered);
+}
+
+function clearLoadingFilters() {
+  currentLoadingPage = 1; // Reset to first page
+  loadingFilterFields.forEach(field => {
+    document.getElementById(`${field}-loading`).value = '';
+    document.getElementById(`${field}-loading-suggest`).classList.add('hidden');
+    currentLoadingFilters[field] = '';
+  });
+  renderLoadingTable(allLoadingData);
+  updateLoadingStats(allLoadingData);
+}
+
+async function fetchLastModifiedLoading() {
+  try {
+    const url = `https://www.googleapis.com/drive/v3/files/${SPREADSHEET_ID}?fields=modifiedTime,modifiedByMeTime&key=${API_KEY}`;
+    const response = await fetch(url);
+    
+    if (response.ok) {
+      const data = await response.json();
+      const modifiedTime = new Date(data.modifiedTime);
+      
+      const now = new Date();
+      const diffMs = now - modifiedTime;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+      
+      let timeAgo;
+      if (diffMins < 1) {
+        timeAgo = 'Baru saja';
+      } else if (diffMins < 60) {
+        timeAgo = `${diffMins} menit yang lalu`;
+      } else if (diffHours < 24) {
+        timeAgo = `${diffHours} jam yang lalu`;
+      } else {
+        timeAgo = `${diffDays} hari yang lalu`;
+      }
+      
+      const formattedDate = modifiedTime.toLocaleString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      
+      document.getElementById('last-updated-loading').innerHTML = `
+        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span class="font-medium">Terakhir diperbarui:</span>
+        <span>${formattedDate}</span>
+        <span class="text-cyan-600">(${timeAgo})</span>
+      `;
+    } else {
+      document.getElementById('last-updated-loading').innerHTML = `
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span>Info pembaruan tidak tersedia</span>
+      `;
+    }
+  } catch (error) {
+    console.error('Error fetching last modified:', error);
+    document.getElementById('last-updated-loading').innerHTML = `
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span>Info pembaruan tidak tersedia</span>
+    `;
+  }
+}
+
+// Setup loading filters
+loadingFilterFields.forEach(field => {
+  const input = document.getElementById(`${field}-loading`);
+  const suggestDiv = document.getElementById(`${field}-loading-suggest`);
+  const toggleBtn = document.getElementById(`${field}-loading-toggle`);
+  
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleDropdownLoading(field);
+  });
+  
+  input.addEventListener('input', (e) => {
+    currentLoadingFilters[field] = e.target.value;
+    showSuggestionsLoading(field, e.target.value);
+  });
+  
+  input.addEventListener('focus', (e) => {
+    if (e.target.value) {
+      showSuggestionsLoading(field, e.target.value);
+    }
+  });
+  
+  document.addEventListener('click', (e) => {
+    if (!input.contains(e.target) && !suggestDiv.contains(e.target) && !toggleBtn.contains(e.target)) {
+      suggestDiv.classList.add('hidden');
+    }
+  });
+  
+  input.addEventListener('keydown', (e) => {
+    const items = suggestDiv.querySelectorAll('.suggest-item');
+    const activeItem = suggestDiv.querySelector('.suggest-item.active');
+    let currentIndex = Array.from(items).indexOf(activeItem);
+    
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (currentIndex < items.length - 1) {
+        if (activeItem) activeItem.classList.remove('active');
+        items[currentIndex + 1].classList.add('active');
+        items[currentIndex + 1].scrollIntoView({ block: 'nearest' });
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (currentIndex > 0) {
+        if (activeItem) activeItem.classList.remove('active');
+        items[currentIndex - 1].classList.add('active');
+        items[currentIndex - 1].scrollIntoView({ block: 'nearest' });
+      }
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (activeItem) {
+        activeItem.click();
+      }
+    } else if (e.key === 'Escape') {
+      suggestDiv.classList.add('hidden');
+    }
+  });
+});
+
+function getAvailableOptionsLoading(field, currentFilterValues) {
+  const fieldName = loadingFieldMapping[field];
+  
+  let filteredData = allLoadingData.filter(r => {
+    return Object.keys(loadingFieldMapping).every(f => {
+      if (f === field) return true;
+      const value = currentFilterValues[f];
+      if (!value) return true;
+      return (r[loadingFieldMapping[f]] || '').toLowerCase().includes(value.toLowerCase());
+    });
+  });
+  
+  const values = new Set();
+  filteredData.forEach(r => {
+    const val = r[fieldName];
+    if (val && val.trim()) {
+      values.add(val.trim());
+    }
+  });
+  
+  return Array.from(values).sort();
+}
+
+function showSuggestionsLoading(field, inputValue, showAll = false) {
+  const suggestDiv = document.getElementById(`${field}-loading-suggest`);
+  
+  const currentFilterValues = { ...currentLoadingFilters };
+  const options = getAvailableOptionsLoading(field, currentFilterValues);
+  
+  let filtered;
+  if (showAll || !inputValue) {
+    filtered = options;
+  } else {
+    filtered = options.filter(opt => 
+      opt.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  }
+  
+  if (filtered.length === 0) {
+    suggestDiv.classList.add('hidden');
+    return;
+  }
+  
+  suggestDiv.innerHTML = '';
+  filtered.forEach(opt => {
+    const div = document.createElement('div');
+    div.className = 'suggest-item';
+    div.textContent = opt;
+    div.onclick = () => {
+      document.getElementById(`${field}-loading`).value = opt;
+      currentLoadingFilters[field] = opt;
+      suggestDiv.classList.add('hidden');
+      filterLoadingData();
+      
+      loadingFilterFields.forEach(f => {
+        if (f !== field) {
+          const input = document.getElementById(`${f}-loading`);
+          if (input.value) {
+            showSuggestionsLoading(f, input.value);
+          }
+        }
+      });
+    };
+    suggestDiv.appendChild(div);
+  });
+  
+  suggestDiv.classList.remove('hidden');
+}
+
+function toggleDropdownLoading(field) {
+  const suggestDiv = document.getElementById(`${field}-loading-suggest`);
+  const input = document.getElementById(`${field}-loading`);
+  
+  if (suggestDiv.classList.contains('hidden')) {
+    loadingFilterFields.forEach(f => {
+      if (f !== field) {
+        document.getElementById(`${f}-loading-suggest`).classList.add('hidden');
+      }
+    });
+    
+    showSuggestionsLoading(field, input.value, true);
+  } else {
+    suggestDiv.classList.add('hidden');
+  }
+}
+
+loadingFilterFields.forEach(id =>
+  document.getElementById(`${id}-loading`).addEventListener('input', filterLoadingData)
+);
+
+document.getElementById('clear-filters-loading').addEventListener('click', clearLoadingFilters);
+
+// Start app
+init();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c458772426840b5',t:'MTc2OTQ4ODM3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+</html>
+
