@@ -6,6 +6,7 @@
   <title>Monitoring Stok GIM</title>
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -290,7 +291,7 @@
      </div>
      <h1 id="app-title" class="text-xl md:text-3xl font-bold text-white">Monitoring Stok GIM</h1>
     </div>
-    <p id="app-subtitle" class="text-cyan-200 text-xs md:text-base">Sistem Pemantauan Real-time</p>
+    <p id="app-subtitle" class="text-cyan-200 text-xs md:text-base">Sistem Pemantauan Stok GIM </p>
    </div><!-- Navigation Tabs -->
    <div class="flex gap-2 md:gap-3 justify-center mb-6 fade-in" style="animation-delay: 0.05s"><button id="tab-stok" class="tab-button active px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all shadow-lg"> Stok GIM </button> <button id="tab-loading" class="tab-button px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all"> Loading </button>
    </div><!-- Stok Page Content -->
@@ -312,30 +313,32 @@
     <div class="glass-card rounded-xl p-4 mb-6 fade-in" style="animation-delay: 0.2s">
      <div class="flex items-center gap-2 mb-3">
       <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
-      </svg><span class="font-semibold text-slate-700">Filter Data</span> <button id="clear-filters" class="ml-auto text-xs text-cyan-600 hover:text-cyan-700 font-medium px-3 py-1 rounded-lg hover:bg-cyan-50 transition-colors"> Reset Filter </button>
+      </svg><span class="font-semibold text-slate-700">Filter Data</span>
+      <div class="ml-auto flex gap-2"><button id="export-pdf" class="text-xs text-white bg-red-600 hover:bg-red-700 font-medium px-3 py-1 rounded-lg transition-colors flex items-center gap-1">  Export PDF </button> <button id="clear-filters" class="text-xs text-cyan-600 hover:text-cyan-700 font-medium px-3 py-1 rounded-lg hover:bg-cyan-50 transition-colors"> Reset Filter </button>
+      </div>
      </div>
      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-      <div class="relative"><input id="produk" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Produk" autocomplete="off"> <button type="button" id="produk-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="produk" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="Produk" autocomplete="off"> <button type="button" id="produk-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="produk-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="size" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Size" autocomplete="off"> <button type="button" id="size-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="size" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="Size" autocomplete="off"> <button type="button" id="size-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="size-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="packing" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Packing" autocomplete="off"> <button type="button" id="packing-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="packing" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="Packing" autocomplete="off"> <button type="button" id="packing-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="packing-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="brand" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Brand" autocomplete="off"> <button type="button" id="brand-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="brand" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="Brand" autocomplete="off"> <button type="button" id="brand-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="brand-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="po" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" PO" autocomplete="off"> <button type="button" id="po-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="po" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="PO" autocomplete="off"> <button type="button" id="po-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="po-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
@@ -348,7 +351,7 @@
     </div><!-- Loading State -->
     <div id="loading" class="flex flex-col items-center justify-center py-16 fade-in">
      <div class="loading-spinner mb-4"></div>
-     <p class="text-white text-sm">Memuat data dari Google Sheets...</p>
+     <p class="text-white text-sm">Memuat data ...</p>
     </div><!-- Error State -->
     <div id="error" class="hidden glass-card rounded-xl p-8 text-center fade-in">
      <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -368,8 +371,6 @@
          <th class="text-left">Packing</th>
          <th class="text-left">Brand</th>
          <th class="text-left">PO</th>
-         <th class="text-center">Masuk</th>
-         <th class="text-center">Keluar</th>
          <th class="text-center">Stok</th>
          <th class="text-right">Nett (kg)</th>
          <th class="text-right">Total Nett (kg)</th>
@@ -381,7 +382,7 @@
      <div class="p-4 bg-slate-50 border-t border-slate-100">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
        <p id="result-count" class="text-sm text-slate-500"></p>
-       <p class="text-xs text-slate-400">Data diperbarui otomatis dari Google Sheets</p>
+       <p class="text-xs text-slate-400">Data diperbarui PPIC  </p>
       </div>
       <div id="pagination-stok" class="flex flex-wrap items-center justify-center gap-2"></div>
      </div>
@@ -417,7 +418,9 @@
     <div class="glass-card rounded-xl p-4 mb-6 fade-in" style="animation-delay: 0.2s">
      <div class="flex items-center gap-2 mb-3">
       <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
-      </svg><span class="font-semibold text-slate-700">Filter Data Loading</span> <button id="clear-filters-loading" class="ml-auto text-xs text-cyan-600 hover:text-cyan-700 font-medium px-3 py-1 rounded-lg hover:bg-cyan-50 transition-colors"> Reset Filter </button>
+      </svg><span class="font-semibold text-slate-700">Filter Data Loading</span>
+      <div class="ml-auto flex gap-2"><button id="export-pdf-loading" class="text-xs text-white bg-red-600 hover:bg-red-700 font-medium px-3 py-1 rounded-lg transition-colors flex items-center gap-1">   Export PDF </button> <button id="clear-filters-loading" class="text-xs text-cyan-600 hover:text-cyan-700 font-medium px-3 py-1 rounded-lg hover:bg-cyan-50 transition-colors"> Reset Filter </button>
+      </div>
      </div>
      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
       <div class="relative"><input id="plan-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="📅 Plan" autocomplete="off"> <button type="button" id="plan-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
@@ -430,7 +433,7 @@
         </svg></button>
        <div id="consignee-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
       </div>
-      <div class="relative"><input id="produk-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder="Produk" autocomplete="off"> <button type="button" id="produk-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
+      <div class="relative"><input id="produk-loading" class="filter-input rounded-lg px-3 py-2.5 pr-10 text-sm placeholder-slate-400 w-full" placeholder=" Produk" autocomplete="off"> <button type="button" id="produk-loading-toggle" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-100 rounded transition-colors">
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg></button>
        <div id="produk-loading-suggest" class="hidden absolute z-20 w-full mt-1 bg-white rounded-lg shadow-lg border border-slate-200 max-h-48 overflow-y-auto custom-scrollbar"></div>
@@ -480,7 +483,7 @@
      <div class="p-4 bg-slate-50 border-t border-slate-100">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
        <p id="result-count-loading" class="text-sm text-slate-500"></p>
-       <p class="text-xs text-slate-400">Data diperbarui otomatis dari Google Sheets</p>
+       <p class="text-xs text-slate-400">Data diperbarui PPIC  </p>
       </div>
       <div id="pagination-loading" class="flex flex-wrap items-center justify-center gap-2"></div>
      </div>
@@ -497,7 +500,7 @@
   </div>
   <script>
 const SPREADSHEET_ID = '1hTR_rqw0BPJm3Ntrp3LNDnZJVcx8uRLkwCsYhWdYbKg';
-const API_KEY = 'AIzaSyBhiKDVDH4fle5_EqAIaA05YjpxVMEBYZM';
+const API_KEY = 'AIzaSyAK2dC7K0WVicPpk275rfL3BKkxiyYX28w';
 const SHEET_NAME = 'STOK';
 const LOADING_SHEET_NAME = 'LOADING';
 
@@ -981,12 +984,6 @@ function renderTable(data) {
       </td>
       <td class="font-mono text-xs">${r.PO || '-'}</td>
       <td class="text-center">
-        <span class="text-emerald-600 font-semibold">${formatNumber(r['IN GIM'])}</span>
-      </td>
-      <td class="text-center">
-        <span class="text-amber-600 font-semibold">${formatNumber(r['OUT GIM'])}</span>
-      </td>
-      <td class="text-center">
         <span class="${stockClass}">${formatNumber(stock)}</span>
       </td>
       <td class="text-right font-mono">${formatNumber(r['Nett Weight'])}</td>
@@ -1048,6 +1045,226 @@ filterFields.forEach(id =>
 );
 
 document.getElementById('clear-filters').addEventListener('click', clearFilters);
+
+// Export to PDF function
+function exportToPDF(data, tableName, pageTitle) {
+  if (data.length === 0) {
+    alert('Tidak ada data untuk diexport');
+    return;
+  }
+
+  const element = document.createElement('div');
+  element.style.padding = '20px';
+  element.style.fontFamily = 'Plus Jakarta Sans, Arial, sans-serif';
+  element.style.lineHeight = '1.6';
+  element.style.color = '#333';
+
+  // Header
+  const header = document.createElement('div');
+  header.style.marginBottom = '30px';
+  header.style.textAlign = 'center';
+  header.innerHTML = `
+    <h1 style="font-size: 24px; font-weight: bold; margin: 0; color: #0f172a;">📊 ${pageTitle}</h1>
+    <p style="font-size: 14px; color: #64748b; margin: 10px 0 0 0;">Laporan Data ${tableName}</p>
+    <p style="font-size: 12px; color: #94a3b8; margin: 5px 0 0 0;">Tanggal: ${new Date().toLocaleString('id-ID')}</p>
+  `;
+  element.appendChild(header);
+
+  // Stats
+  if (tableName === 'Stok GIM') {
+    let totalStok = 0;
+    let totalNett = 0;
+    
+    data.forEach(r => {
+      totalStok += parseFloat(r['STOK GIM']) || 0;
+      totalNett += parseFloat(r['Total Nett Weight']) || 0;
+    });
+
+    const stats = document.createElement('div');
+    stats.style.marginBottom = '20px';
+    stats.style.display = 'grid';
+    stats.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    stats.style.gap = '15px';
+    stats.innerHTML = `
+      <div style="padding: 12px; background: #f0f9ff; border-left: 4px solid #0ea5e9; border-radius: 6px;">
+        <p style="font-size: 12px; color: #64748b; margin: 0;">Total Produk</p>
+        <p style="font-size: 18px; font-weight: bold; color: #0ea5e9; margin: 5px 0 0 0;">${data.length}</p>
+      </div>
+      <div style="padding: 12px; background: #f0fdf4; border-left: 4px solid #10b981; border-radius: 6px;">
+        <p style="font-size: 12px; color: #64748b; margin: 0;">Total Stok</p>
+        <p style="font-size: 18px; font-weight: bold; color: #10b981; margin: 5px 0 0 0;">${totalStok.toLocaleString('id-ID')}</p>
+      </div>
+      <div style="padding: 12px; background: #faf5ff; border-left: 4px solid #8b5cf6; border-radius: 6px;">
+        <p style="font-size: 12px; color: #64748b; margin: 0;">Total Nett (kg)</p>
+        <p style="font-size: 18px; font-weight: bold; color: #8b5cf6; margin: 5px 0 0 0;">${totalNett.toFixed(2).toLocaleString('id-ID')}</p>
+      </div>
+    `;
+    element.appendChild(stats);
+  } else {
+    let totalJumlah = 0;
+    let totalGIM = 0;
+    let totalALL = 0;
+    
+    data.forEach(r => {
+      totalJumlah += parseFloat(r['JUMLAH']) || 0;
+      totalGIM += parseFloat(r['STOK GIM']) || 0;
+      totalALL += parseFloat(r['STOK ALL']) || 0;
+    });
+
+    const stats = document.createElement('div');
+    stats.style.marginBottom = '20px';
+    stats.style.display = 'grid';
+    stats.style.gridTemplateColumns = 'repeat(4, 1fr)';
+    stats.style.gap = '12px';
+    stats.innerHTML = `
+      <div style="padding: 12px; background: #f0f9ff; border-left: 4px solid #0ea5e9; border-radius: 6px;">
+        <p style="font-size: 12px; color: #64748b; margin: 0;">Total Loading</p>
+        <p style="font-size: 16px; font-weight: bold; color: #0ea5e9; margin: 5px 0 0 0;">${data.length}</p>
+      </div>
+      <div style="padding: 12px; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 6px;">
+        <p style="font-size: 12px; color: #64748b; margin: 0;">Total Jumlah</p>
+        <p style="font-size: 16px; font-weight: bold; color: #f59e0b; margin: 5px 0 0 0;">${totalJumlah.toLocaleString('id-ID')}</p>
+      </div>
+      <div style="padding: 12px; background: #f0fdf4; border-left: 4px solid #10b981; border-radius: 6px;">
+        <p style="font-size: 12px; color: #64748b; margin: 0;">Stok GIM</p>
+        <p style="font-size: 16px; font-weight: bold; color: #10b981; margin: 5px 0 0 0;">${totalGIM.toLocaleString('id-ID')}</p>
+      </div>
+      <div style="padding: 12px; background: #faf5ff; border-left: 4px solid #8b5cf6; border-radius: 6px;">
+        <p style="font-size: 12px; color: #64748b; margin: 0;">STOK ALL</p>
+        <p style="font-size: 16px; font-weight: bold; color: #8b5cf6; margin: 5px 0 0 0;">${totalALL.toLocaleString('id-ID')}</p>
+      </div>
+    `;
+    element.appendChild(stats);
+  }
+
+  // Table
+  const table = document.createElement('table');
+  table.style.width = '100%';
+  table.style.borderCollapse = 'collapse';
+  table.style.marginTop = '20px';
+  table.style.fontSize = '11px';
+
+  // Table header
+  const thead = document.createElement('thead');
+  const headerRow = document.createElement('tr');
+  headerRow.style.backgroundColor = '#0ea5e9';
+  headerRow.style.color = 'white';
+
+  const headers = tableName === 'Stok GIM' 
+    ? ['Produk', 'Size', 'Packing', 'Brand', 'PO', 'Stok', 'Nett (kg)', 'Total Nett (kg)']
+    : ['Plan', 'Consignee/INV', 'Produk', 'Size', 'Packing', 'Brand', 'PO', 'Jumlah', 'Stok GIM', '+/-', 'Stok ALL'];
+
+  headers.forEach(h => {
+    const th = document.createElement('th');
+    th.textContent = h;
+    th.style.padding = '10px';
+    th.style.textAlign = 'left';
+    th.style.fontWeight = 'bold';
+    th.style.borderBottom = '2px solid #0284c7';
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+
+  // Table body
+  const tbody = document.createElement('tbody');
+  data.forEach((row, idx) => {
+    const tr = document.createElement('tr');
+    tr.style.borderBottom = '1px solid #e2e8f0';
+    tr.style.backgroundColor = idx % 2 === 0 ? '#ffffff' : '#f8fafc';
+
+    if (tableName === 'Stok GIM') {
+      const cells = [
+        row.PRODUK || '-',
+        row.SIZE || '-',
+        row.PACKING || '-',
+        row.BRAND || '-',
+        row.PO || '-',
+        (parseFloat(row['STOK GIM']) || 0).toLocaleString('id-ID'),
+        (parseFloat(row['Nett Weight']) || 0).toFixed(2).toLocaleString('id-ID'),
+        (parseFloat(row['Total Nett Weight']) || 0).toFixed(2).toLocaleString('id-ID')
+      ];
+      
+      cells.forEach(cell => {
+        const td = document.createElement('td');
+        td.textContent = cell;
+        td.style.padding = '8px';
+        tr.appendChild(td);
+      });
+    } else {
+      const cells = [
+        row.PLAN || '-',
+        row['CONSIGNEE / INV'] || '-',
+        row.PRODUK || '-',
+        row.SIZE || '-',
+        row.PACKING || '-',
+        row.BRAND || '-',
+        row.PO || '-',
+        (parseFloat(row['JUMLAH']) || 0).toLocaleString('id-ID'),
+        (parseFloat(row['STOK GIM']) || 0).toLocaleString('id-ID'),
+        (parseFloat(row['STOK ALL']) || 0).toLocaleString('id-ID')
+      ];
+      
+      cells.forEach(cell => {
+        const td = document.createElement('td');
+        td.textContent = cell;
+        td.style.padding = '8px';
+        tr.appendChild(td);
+      });
+    }
+
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  element.appendChild(table);
+
+  // Footer
+  const footer = document.createElement('div');
+  footer.style.marginTop = '40px';
+  footer.style.paddingTop = '20px';
+  footer.style.borderTop = '1px solid #e2e8f0';
+  footer.style.fontSize = '12px';
+  footer.style.color = '#64748b';
+  footer.innerHTML = `
+    <p style="margin: 0;">Laporan ini dihasilkan oleh Monitoring Stok GIM</p>
+    <p style="margin: 5px 0 0 0;">© 2026 - Semua hak dilindungi</p>
+  `;
+  element.appendChild(footer);
+
+  // Generate PDF
+  const opt = {
+    margin: 10,
+    filename: `${tableName.replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4' }
+  };
+
+  html2pdf().set(opt).from(element).save();
+}
+
+document.getElementById('export-pdf').addEventListener('click', () => {
+  const filtered = allData.filter(r =>
+    (!currentFilters.produk || (r.PRODUK || '').toLowerCase().includes(currentFilters.produk.toLowerCase())) &&
+    (!currentFilters.size || (r.SIZE || '').toLowerCase().includes(currentFilters.size.toLowerCase())) &&
+    (!currentFilters.packing || (r.PACKING || '').toLowerCase().includes(currentFilters.packing.toLowerCase())) &&
+    (!currentFilters.brand || (r.BRAND || '').toLowerCase().includes(currentFilters.brand.toLowerCase())) &&
+    (!currentFilters.po || (r.PO || '').toLowerCase().includes(currentFilters.po.toLowerCase()))
+  );
+  exportToPDF(filtered, 'Stok GIM', 'Monitoring Stok GIM');
+});
+
+document.getElementById('export-pdf-loading').addEventListener('click', () => {
+  const filtered = allLoadingData.filter(r =>
+    (!currentLoadingFilters.plan || (r.PLAN || '').toLowerCase().includes(currentLoadingFilters.plan.toLowerCase())) &&
+    (!currentLoadingFilters.consignee || (r['CONSIGNEE / INV'] || '').toLowerCase().includes(currentLoadingFilters.consignee.toLowerCase())) &&
+    (!currentLoadingFilters.produk || (r.PRODUK || '').toLowerCase().includes(currentLoadingFilters.produk.toLowerCase())) &&
+    (!currentLoadingFilters.size || (r.SIZE || '').toLowerCase().includes(currentLoadingFilters.size.toLowerCase())) &&
+    (!currentLoadingFilters.brand || (r.BRAND || '').toLowerCase().includes(currentLoadingFilters.brand.toLowerCase())) &&
+    (!currentLoadingFilters.po || (r.PO || '').toLowerCase().includes(currentLoadingFilters.po.toLowerCase()))
+  );
+  exportToPDF(filtered, 'Loading', 'Monitoring Loading');
+});
 
 // SDK initialization
 async function onConfigChange(cfg) {
@@ -1539,7 +1756,5 @@ document.getElementById('clear-filters-loading').addEventListener('click', clear
 
 // Start app
 init();
-</script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c458772426840b5',t:'MTc2OTQ4ODM3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-
+</script>></body>
 </html>
